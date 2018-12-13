@@ -62,7 +62,87 @@ req("GET","https://dog.ceo/api/breeds/image/random",)
   renderimg(data)
 })
 
-
+//test
+function name(data) {
+  {
+ 
+    console.log(data.message);
+    console.log(data);
+    let object = data.message;
+    for (const key in object) {
+      if (object.hasOwnProperty(key)) {
+        const element = key;
+        const arr = object[key];
+        
+        
+        //Make all the list of all breed
+        let newitem = document.createElement("a");
+        newitem.textContent = element;
+        
+        drop.appendChild(newitem);
+        newitem.addEventListener('click', function lol(){
+          
+          //obs make this a function
+          if (document.querySelector(".morebtnIsOn")) {
+            if (document.querySelectorAll(".morebtnIsOn")) {
+              let isclass = document.querySelectorAll(".morebtnIsOn");
+              isclass.forEach(element => {
+                element.remove();
+              });
+            }
+          }
+          //here we start showing the selected breed
+          btn.textContent = "back to random"
+          document.querySelector("#myDropdown").className = "dropdown-content";
+          console.log('test')
+            req("GET","https://dog.ceo/api/breed/"+element+"/images/random",)
+              .then(function(data){
+              renderimg(data);
+              
+              if (arr.length > 0) {
+                for (let i = 0; i < arr.length; i++) {
+                  const el = arr[i];
+                  let newsub = document.createElement("li");
+                  newsub.textContent = el;
+                  newsub.className = "morebtnIsOn"
+                  sublist.appendChild(newsub);
+                  newsub.addEventListener('click',function(){
+                    req("GET","https://dog.ceo/api/breed/"+element+"/"+el+"/images/random")
+                    .then(function(data){
+                      renderimg(data);
+                      let morebtn = document.createElement("button");
+                      morebtn.textContent = "get more sub "+el;
+                      morebtn.className = "morebtnIsOn"
+                      morebtn.addEventListener('click', function(){
+                        req("GET","https://dog.ceo/api/breed/"+element+"/"+el+"/images/random",)
+                        .then(function(data){
+                          renderimg(data);
+              
+                         }  )
+                      })
+                      btnholder.appendChild(morebtn);
+                    })
+                  })
+                }
+              }
+            })
+          let morebtn = document.createElement("button");
+          morebtn.textContent = "get more "+element;
+          morebtn.className = "morebtnIsOn"
+          morebtn.addEventListener('click', function(){
+            req("GET","https://dog.ceo/api/breed/"+element+"/images/random",)
+              .then(function(data){
+              renderimg(data);
+              
+            })
+          })
+          btnholder.appendChild(morebtn);
+        })
+      }
+    }
+  }
+}
+//test end
 
 //====== refresh btn=======
 btn.addEventListener('click', function(){
@@ -84,77 +164,5 @@ btn.addEventListener('click', function(){
 
 //========Get it all==========
 req("GET", "https://dog.ceo/api/breeds/list/all",)
-.then(function(data){
- 
-  console.log(data.message);
-  console.log(data);
-  let object = data.message;
-  for (const key in object) {
-    if (object.hasOwnProperty(key)) {
-      const element = key;
-      const arr = object[key];
-      //Make all the list of all breed
-      let newitem = document.createElement("a");
-      newitem.textContent = element;
-      drop.appendChild(newitem);
-      newitem.addEventListener('click', function lol(){
-        
-        //obs make this a function
-        if (document.querySelector(".morebtnIsOn")) {
-          if (document.querySelectorAll(".morebtnIsOn")) {
-            let isclass = document.querySelectorAll(".morebtnIsOn");
-            isclass.forEach(element => {
-              element.remove();
-            });
-          }
-        }
-        //here we start showing the selected breed
-        btn.textContent = "back to random"
-        document.querySelector("#myDropdown").className = "dropdown-content";
-        console.log('test')
-          req("GET","https://dog.ceo/api/breed/"+element+"/images/random",)
-            .then(function(data){
-            renderimg(data);
-            
-            if (arr.length > 0) {
-              for (let i = 0; i < arr.length; i++) {
-                const el = arr[i];
-                let newsub = document.createElement("li");
-                newsub.textContent = el;
-                newsub.className = "morebtnIsOn"
-                sublist.appendChild(newsub);
-                newsub.addEventListener('click',function(){
-                  req("GET","https://dog.ceo/api/breed/"+element+"/"+el+"/images/random")
-                  .then(function(data){
-                    renderimg(data);
-                    let morebtn = document.createElement("button");
-                    morebtn.textContent = "get more sub "+el;
-                    morebtn.className = "morebtnIsOn"
-                    morebtn.addEventListener('click', function(){
-                      req("GET","https://dog.ceo/api/breed/"+element+"/"+el+"/images/random",)
-                      .then(function(data){
-                        renderimg(data);
-            
-                       }  )
-                    })
-                    btnholder.appendChild(morebtn);
-                  })
-                })
-              }
-            }
-          })
-        let morebtn = document.createElement("button");
-        morebtn.textContent = "get more "+element;
-        morebtn.className = "morebtnIsOn"
-        morebtn.addEventListener('click', function(){
-          req("GET","https://dog.ceo/api/breed/"+element+"/images/random",)
-            .then(function(data){
-            renderimg(data);
-            
-          })
-        })
-        btnholder.appendChild(morebtn);
-      })
-    }
-  }
-})
+.then(function(data){name(data)})
+//get the if
